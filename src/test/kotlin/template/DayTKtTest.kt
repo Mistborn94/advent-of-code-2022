@@ -15,7 +15,7 @@ internal class DayTKtTest {
         val lines = readDayFile(day, "sample1.in").readText().trim().lines()
 
         assertEquals(0, solveA(lines))
-        assertEquals(0, solveB(lines))
+//        assertEquals(0, solveB(lines))
     }
 
     @Test
@@ -23,7 +23,7 @@ internal class DayTKtTest {
         val lines = readDayFile(day, "sample2.in").readText().trim().lines()
 
         assertEquals(0, solveA(lines))
-        assertEquals(0, solveB(lines))
+//        assertEquals(0, solveB(lines))
     }
 
     @Test
@@ -36,6 +36,6 @@ internal class DayTKtTest {
 
         val solveB = solveB(lines)
         println("B: $solveB")
-        assertEquals(0, solveB)
+//        assertEquals(0, solveB)
     }
 }

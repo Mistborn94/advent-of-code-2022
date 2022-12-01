@@ -10,19 +10,23 @@ internal class Day1KtTest {
 
     @Test
     fun sample1() {
-        val lines = """|199
-                       |200
-                       |208
-                       |210
-                       |200
-                       |207
-                       |240
-                       |269
-                       |260
-                       |263""".trimMargin()
+        val lines = """1000
+2000
+3000
 
-        assertEquals(7, solveA(lines))
-        assertEquals(5, solveB(lines))
+4000
+
+5000
+6000
+
+7000
+8000
+9000
+
+10000"""
+
+        assertEquals(24000, solveA(lines))
+        assertEquals(45000, solveB(lines))
     }
 
 
@@ -32,10 +36,10 @@ internal class Day1KtTest {
 
         val solveA = solveA(text)
         println("A: $solveA")
-        assertEquals(1139, solveA)
+        assertEquals(67633, solveA)
 
         val solveB = solveB(text)
         println("B: $solveB")
-        assertEquals(1103, solveB)
+        assertEquals(199628, solveB)
     }
 }
