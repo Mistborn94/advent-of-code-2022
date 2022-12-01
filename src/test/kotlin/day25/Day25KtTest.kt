@@ -1,14 +1,14 @@
-package template
+package day25
 
 import helper.readDayFile
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Ignore //Ignore Class
-internal class DayTKtTest {
 
-    private val day = 0
+internal class Day25KtTest {
+
+    private val day = 25
 
     @Test
     fun sample1() {

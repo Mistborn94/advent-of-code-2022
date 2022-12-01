@@ -1,4 +1,4 @@
-package template
+package day12
 
 fun solveA(text: String): Int {
     return 0
