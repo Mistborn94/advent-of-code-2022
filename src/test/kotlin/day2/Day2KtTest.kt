@@ -12,9 +12,9 @@ internal class Day2KtTest {
     @Test
     fun sample1() {
         val text = """
-A Y
-B X
-C Z
+            |A Y
+            |B X
+            |C Z
         """.trimMargin()
 
         assertEquals(15, solveA(text))

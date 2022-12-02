@@ -1,85 +1,64 @@
 package day2
 
-val rock = setOf("A", "X")
-val paper = setOf("B", "Y")
-val scis = setOf("C", "Z")
-fun solveA(text: String): Int {
+enum class RpsAction(val baseScore: Int) {
+    ROCK(1) {
+        override fun losesAgainst(): RpsAction = PAPER
+        override fun winsAgainst(): RpsAction = SCISSORS
+    },
+    PAPER(2) {
+        override fun losesAgainst(): RpsAction = SCISSORS
+        override fun winsAgainst(): RpsAction = ROCK
+    },
+    SCISSORS(3) {
+        override fun losesAgainst(): RpsAction = ROCK
+        override fun winsAgainst(): RpsAction = PAPER
+    };
 
-    return text.trim().lines().map { it.split(" ") }.sumOf { (op, me) ->
-        scoreA(op, me)
-    }
+    abstract fun losesAgainst(): RpsAction
+    abstract fun winsAgainst(): RpsAction
+}
+fun solveA(text: String): Int {
     //rock = 1 A X
     //paper = 2 B Y
     //scissors = 3 C Z
-    return 0;
-}
-
-private fun scoreA(op: String, me: String) = when (op) {
-    in rock -> {
-        when (me) {
-            in rock -> 3 + 1
-            in paper -> 6 + 2
-            in scis -> 0 + 3
-            else -> throw IllegalArgumentException()
+    return text.trim().lines().map { it.split(" ") }.sumOf { (op, me) ->
+        val opAction = when (op) {
+            "A" -> RpsAction.ROCK
+            "B" -> RpsAction.PAPER
+            "C" -> RpsAction.SCISSORS
+            else -> throw IllegalArgumentException();
         }
-    }
-
-    in paper -> {
-        when (me) {
-            in rock -> 0 + 1
-            in paper -> 3 + 2
-            in scis -> 6 + 3
-            else -> throw IllegalArgumentException()
+        val meAction = when (me) {
+            "X" -> RpsAction.ROCK
+            "Y" -> RpsAction.PAPER
+            "Z" -> RpsAction.SCISSORS
+            else -> throw IllegalArgumentException();
         }
-    }
-
-    in scis -> {
-        when (me) {
-            in rock -> 6 + 1
-            in paper -> 0 + 2
-            in scis -> 3 + 3
-            else -> throw IllegalArgumentException("me " + me)
+        val outcomeScore = when (opAction) {
+            meAction.winsAgainst() -> 6
+            meAction -> 3
+            else -> 0
         }
+        meAction.baseScore + outcomeScore
     }
-
-    else -> throw IllegalArgumentException("op " + op)
 }
 
 
 fun solveB(text: String): Int {
     return text.trim().lines().map { it.split(" ") }.sumOf { (op, me) ->
-        scoreB(op, me)
+        val opAction = when (op) {
+            "A" -> RpsAction.ROCK
+            "B" -> RpsAction.PAPER
+            "C" -> RpsAction.SCISSORS
+            else -> throw IllegalArgumentException();
+        }
+
+        when (me) {
+            "X" -> 0 + opAction.winsAgainst().baseScore
+            "Y" -> 3 + opAction.baseScore
+            "Z" -> 6 + opAction.losesAgainst().baseScore
+            else -> throw IllegalArgumentException()
+        }
     }
-    return 0
 }
 
-private fun scoreB(op: String, me: String) = when (op) {
-    in rock -> {
-        when (me) {
-            "X" -> 0 + 3
-            "Y" -> 3 + 1
-            "Z" -> 6 + 2
-            else -> throw IllegalArgumentException()
-        }
-    }
-
-    in paper -> {
-        when (me) {
-            "X" -> 0 + 1
-            "Y" -> 3 + 2
-            "Z" -> 6 + 3
-            else -> throw IllegalArgumentException()
-        }
-    }
-
-    in scis -> {
-        when (me) {
-            "X" -> 0 + 2
-            "Y" -> 3 + 3
-            "Z" -> 6 + 1
-            else -> throw IllegalArgumentException()
-        }
-    }
-
-    else -> throw IllegalArgumentException("op " + op)
-}
