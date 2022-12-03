@@ -1,64 +1,44 @@
 package day2
 
-enum class RpsAction(val baseScore: Int) {
-    ROCK(1) {
-        override fun losesAgainst(): RpsAction = PAPER
-        override fun winsAgainst(): RpsAction = SCISSORS
-    },
-    PAPER(2) {
-        override fun losesAgainst(): RpsAction = SCISSORS
-        override fun winsAgainst(): RpsAction = ROCK
-    },
-    SCISSORS(3) {
-        override fun losesAgainst(): RpsAction = ROCK
-        override fun winsAgainst(): RpsAction = PAPER
-    };
+val baseScores = mapOf(
+    'X' to 1, //Rock
+    'Y' to 2, //Paper
+    'Z' to 3  //Scissors
+)
 
-    abstract fun losesAgainst(): RpsAction
-    abstract fun winsAgainst(): RpsAction
-}
+val roundScores = mapOf(
+    "A X" to 3,
+    "A Y" to 6,
+    "A Z" to 0,
+
+    "B X" to 0,
+    "B Y" to 3,
+    "B Z" to 6,
+
+    "C X" to 6,
+    "C Y" to 0,
+    "C Z" to 3,
+)
+
 fun solveA(text: String): Int {
-    //rock = 1 A X
-    //paper = 2 B Y
-    //scissors = 3 C Z
-    return text.trim().lines().map { it.split(" ") }.sumOf { (op, me) ->
-        val opAction = when (op) {
-            "A" -> RpsAction.ROCK
-            "B" -> RpsAction.PAPER
-            "C" -> RpsAction.SCISSORS
-            else -> throw IllegalArgumentException();
-        }
-        val meAction = when (me) {
-            "X" -> RpsAction.ROCK
-            "Y" -> RpsAction.PAPER
-            "Z" -> RpsAction.SCISSORS
-            else -> throw IllegalArgumentException();
-        }
-        val outcomeScore = when (opAction) {
-            meAction.winsAgainst() -> 6
-            meAction -> 3
-            else -> 0
-        }
-        meAction.baseScore + outcomeScore
+    return text.trim().lines().sumOf { str ->
+        val me = str[2]
+        baseScores[me]!! + roundScores[str]!!
     }
 }
-
 
 fun solveB(text: String): Int {
-    return text.trim().lines().map { it.split(" ") }.sumOf { (op, me) ->
-        val opAction = when (op) {
-            "A" -> RpsAction.ROCK
-            "B" -> RpsAction.PAPER
-            "C" -> RpsAction.SCISSORS
-            else -> throw IllegalArgumentException();
-        }
+    return text.lines().sumOf {
+        val op = it[0]
 
-        when (me) {
-            "X" -> 0 + opAction.winsAgainst().baseScore
-            "Y" -> 3 + opAction.baseScore
-            "Z" -> 6 + opAction.losesAgainst().baseScore
+        val roundScore: Int = when (it[2]) {
+            'X' -> 0
+            'Y' -> 3
+            'Z' -> 6
             else -> throw IllegalArgumentException()
         }
+
+        val item = roundScores.firstNotNullOf { (key, value) -> if (key[0] == op && value == roundScore) key else null }
+        roundScore + baseScores[item[2]]!!
     }
 }
-

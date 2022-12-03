@@ -23,7 +23,7 @@ internal class Day2KtTest {
 
     @Test
     fun solve() {
-        val lines = readDayFile(day, "input").readText()
+        val lines = readDayFile(day, "input").readText().trim()
 
         val solveA = solveA(lines)
         println("A: $solveA")
