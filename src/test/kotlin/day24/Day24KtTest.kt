@@ -14,7 +14,7 @@ internal class Day24KtTest {
     fun sample1() {
         val text = """
             |
-        """.trimMargin()
+        """.trimMargin().trim()
 
         assertEquals(0, solveA(text))
         assertEquals(0, solveB(text))
@@ -23,7 +23,7 @@ internal class Day24KtTest {
     @Test
     @Ignore
     fun sample2() {
-        val text = readDayFile(day, "sample2.in").readText()
+        val text = readDayFile(day, "sample2.in").readText().trim()
 
         assertEquals(0, solveA(text))
         assertEquals(0, solveB(text))
@@ -31,7 +31,7 @@ internal class Day24KtTest {
 
     @Test
     fun solve() {
-        val lines = readDayFile(day, "input").readText()
+        val lines = readDayFile(day, "input").readText().trim()
 
         val solveA = solveA(lines)
         println("A: $solveA")
