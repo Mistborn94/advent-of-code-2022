@@ -1,10 +1,22 @@
 package day3
 
 fun solveA(text: String): Int {
-    return 0
+    return text.trim().lines().sumOf { line ->
+        val comp1 = line.substring(0, line.trim().length / 2)
+        val comp2 = line.substring(line.trim().length / 2)
+        getScore(comp1.first { it in comp2 })
+    }
 }
 
+private fun getScore(c: Char) = if (c.isLowerCase()) {
+    c.code - 'a'.code + 1
+} else {
+    c.code - 'A'.code + 27
+}
 
 fun solveB(text: String): Int {
-    return 0
+    val groups = text.trim().lines().windowed(3, 3)
+    return groups.sumOf { (a, b, c) ->
+        getScore(a.first { it in b && it in c })
+    }
 }
