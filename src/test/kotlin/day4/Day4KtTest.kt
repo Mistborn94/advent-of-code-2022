@@ -18,7 +18,7 @@ internal class Day4KtTest {
             |2-8,3-7
             |6-6,4-6
             |2-6,4-8
-        """.trimMargin().trim()
+        """.trimMargin().trimEnd()
 
         assertEquals(2, solveA(text))
         assertEquals(4, solveB(text))
@@ -26,7 +26,7 @@ internal class Day4KtTest {
 
     @Test
     fun solve() {
-        val lines = readDayFile(day, "input").readText().trim()
+        val lines = readDayFile(day, "input").readText().trimEnd()
 
         val solveA = solveA(lines)
         println("A: $solveA")
