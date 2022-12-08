@@ -13,11 +13,15 @@ internal class Day8KtTest {
     @Test
     fun sample1() {
         val text = """
-            |
+            |30373
+25512
+65332
+33549
+35390
         """.trimMargin().trimEnd()
 
-        assertEquals(0, solveA(text))
-        assertEquals(0, solveB(text))
+        assertEquals(21, solveA(text))
+        assertEquals(8, solveB(text))
     }
 
     @Test
@@ -35,10 +39,10 @@ internal class Day8KtTest {
 
         val solveA = solveA(lines)
         println("A: $solveA")
-        assertEquals(0, solveA)
+//        assertEquals(0, solveA)
 
         val solveB = solveB(lines)
         println("B: $solveB")
-        assertEquals(0, solveB)
+//        assertEquals(0, solveB)
     }
 }
