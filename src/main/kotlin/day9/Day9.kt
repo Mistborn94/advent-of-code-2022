@@ -7,25 +7,14 @@ fun solveA(text: String): Int {
 
     var currentHead = Point(0, 0)
     var currentTail = Point(0, 0)
-    val tailPosSeen = mutableSetOf<Point>(currentTail)
+    val tailPosSeen = mutableSetOf(currentTail)
 
     text.lines().forEach { line ->
         val (count, headMove) = parseLine(line)
         repeat(count) {
             currentHead += headMove
-            val diff = currentHead - currentTail
-
-//            tailPosSeen.add(calcNext(currentHead, currentTail))
-            if (abs(diff.x) > 1 || abs(diff.y) > 1) {
-//                println("Head $currentHead, Tail $currentTail, Diff $diff")
-                //tail must move
-                val xMovement = calMovement(diff.x)
-                val yMovement = calMovement(diff.y)
-                currentTail = calcNext(currentHead, currentTail)
-                tailPosSeen.add(currentTail)
-            }
-//            println("After {$line}-$it head is $currentHead and tail is $currentTail")
-
+            currentTail = calcNext(currentHead, currentTail)
+            tailPosSeen.add(currentTail)
         }
     }
     return tailPosSeen.size
