@@ -15,6 +15,14 @@ fun Int.toBinaryDigits(bitLength: Int): List<Int> = (bitLength - 1 downTo 0).map
 
 fun Int.pow(n: Int) = this.toDouble().pow(n).toInt()
 
+fun <T> recursiveRepeat(n: Int, initial: T, func: (T) -> T): T {
+    return if (n == 0) {
+        initial
+    } else {
+        recursiveRepeat(n - 1, func(initial), func)
+    }
+}
+
 fun IntRange.size(): Int = max(0, last - first + 1)
 fun Iterable<Long>.product() = reduce { acc, item -> acc * item }
 fun Iterable<Int>.product() = reduce { acc, item -> acc * item }
