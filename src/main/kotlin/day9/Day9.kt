@@ -54,16 +54,14 @@ fun solveB(text: String): Int {
     text.lines().forEach { line ->
         val (count, headMove) = parseLine(line)
         repeat(count) {
-            val newRope = rope.toMutableList()
-            newRope[0] = rope.first() + headMove
-
-            rope.indices.forEach { index ->
-                if (index > 0) {
-                    newRope[index] = calcNext(newRope[index - 1], rope[index])
+            rope = rope.runningFoldIndexed(emptyList()) { i: Int, acc: List<Point>, point: Point ->
+                if (i == 0) {
+                    listOf(point + headMove)
+                } else {
+                    acc + calcNext(acc.last(), point)
                 }
-            }
+            }.last()
 
-            rope = newRope
             tailPosSeen.add(rope.last())
 
         }
