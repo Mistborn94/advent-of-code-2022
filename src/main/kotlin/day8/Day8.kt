@@ -68,46 +68,25 @@ fun score(point: Point, trees: List<List<Int>>): Int {
     val width = trees[0].size
 
     val treeHeight = trees[row][col]
+
     if (col == 0 || row == 0 || col == width - 1 || row == height - 1) {
-//        println("Tree $point is on the edge, score is 0")
         return 0
     }
 
-//    println("Starting Tree <$col,$row> [$treeHeight]")
-    var a = 0
-    for (r in (row - 1).downTo(0)) {
-//        println("Checking a <$r,$col> [${trees[r][col}]")
-        a += 1
-        if (trees[r][col] >= treeHeight) {
-            break;
-        }
-    }
+    val up = calcVertical((row - 1).downTo(0), trees, col, treeHeight)
+    val down = calcVertical(row + 1 until height, trees, col, treeHeight)
+    val left = calcHorizontal((col - 1).downTo(0), trees, row, treeHeight)
+    val right = calcHorizontal(col + 1 until width, trees, row, treeHeight)
 
-    var b = 0
-    for (r in (row + 1 until height)) {
-        b += 1
-        if (trees[r][col] >= treeHeight) {
-            break;
-        }
-    }
+    return up * down * left * right
+}
 
-    var sc = 0
-    for (c in (col - 1).downTo(0)) {
-        sc += 1
-        if (trees[row][c] >= treeHeight) {
-            break;
-        }
-    }
+private fun calcVertical(range: IntProgression, trees: List<List<Int>>, col: Int, treeHeight: Int): Int {
+    val index = range.indexOfFirst { r -> trees[r][col] >= treeHeight }
+    return if (index == -1) range.count() else index + 1
+}
 
-    var d = 0
-    for (c in col + 1 until width) {
-        d += 1
-        if (trees[row][c] >= treeHeight) {
-            break;
-        }
-    }
-    //left
-
-//    println("Tree <$row,$col> [$treeHeight] distances are [$a, $b, $sc, $d] score is ${a * b * sc * d}")
-    return a * b * sc * d
+private fun calcHorizontal(range: IntProgression, trees: List<List<Int>>, row: Int, treeHeight: Int): Int {
+    val index = range.indexOfFirst { c -> trees[row][c] >= treeHeight }
+    return if (index == -1) range.count() else index + 1
 }
