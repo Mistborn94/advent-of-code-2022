@@ -5,16 +5,16 @@ import kotlin.math.abs
 //Find the signal strength during the 20th, 60th, 100th, 140th, 180th, and 220th cycles.
 // What is the sum of these six signal strengths?
 
-fun solveA(text: String): Long {
-    val list = mutableListOf<Long>()
+fun solveA(text: String): Int {
+    val list = mutableListOf<Int>()
     var x = 1
 
     text.lines().forEach { line ->
-        list.add(x.toLong())
+        list.add(x)
         if (line.startsWith("addx")) {
             val (_, inc) = line.split(" ")
             x += inc.toInt()
-            list.add(x.toLong())
+            list.add(x)
         }
     }
     val relevant = setOf(20, 60, 100, 140, 180, 220)
@@ -22,7 +22,7 @@ fun solveA(text: String): Long {
 }
 
 //The i-2 solves for 'during' instead of 'after'
-private fun sigStrength(list: MutableList<Long>, i: Int) = list[i - 2] * i
+private fun sigStrength(list: List<Int>, i: Int) = list[i - 2] * i
 
 //CRT: 40 wide and 6 high.
 //Vertical position of the sprite doesn't matter
