@@ -6,25 +6,23 @@ import kotlin.math.abs
 // What is the sum of these six signal strengths?
 
 fun solveA(text: String): Long {
-    val list = mutableListOf<Long>(0, 1)
+    val list = mutableListOf<Long>()
     var x = 1
 
     text.lines().forEach { line ->
-        if (line.startsWith("noop")) {
-            list.add(x.toLong())
-        } else if (line.startsWith("addx")) {
+        list.add(x.toLong())
+        if (line.startsWith("addx")) {
             val (_, inc) = line.split(" ")
-            list.add(x.toLong())
             x += inc.toInt()
             list.add(x.toLong())
-
         }
     }
     val relevant = setOf(20, 60, 100, 140, 180, 220)
     return relevant.sumOf { sigStrength(list, it) }
 }
 
-private fun sigStrength(list: MutableList<Long>, i: Int) = list[i] * i
+//The i-2 solves for 'during' instead of 'after'
+private fun sigStrength(list: MutableList<Long>, i: Int) = list[i - 2] * i
 
 //CRT: 40 wide and 6 high.
 //Vertical position of the sprite doesn't matter
