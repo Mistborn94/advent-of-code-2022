@@ -73,7 +73,7 @@ sealed class Monkey(private val items: MutableList<Long>, val operation: (Long) 
     fun playTurn(monkeys: List<Monkey>, divisor: Int) {
         items.forEach { oldLevel ->
             itemCount += 1
-            val newLevel = calNewWorryLevel(oldLevel, divisor)
+            val newLevel = newWorryLevel(oldLevel, divisor)
 
             if (newLevel % testDivisor == 0L) {
                 monkeys[trueTarget].addItem(newLevel)
@@ -84,13 +84,13 @@ sealed class Monkey(private val items: MutableList<Long>, val operation: (Long) 
         items.clear()
     }
 
-    protected abstract fun calNewWorryLevel(worryLevel: Long, divisor: Int): Long
+    protected abstract fun newWorryLevel(worryLevel: Long, divisor: Int): Long
 
     class MonkeyA(items: MutableList<Long>, operation: (Long) -> Long, testDivisor: Int, trueTarget: Int, falseTarget: Int) : Monkey(items, operation, testDivisor, trueTarget, falseTarget) {
-        override fun calNewWorryLevel(worryLevel: Long, divisor: Int): Long = operation(worryLevel) / divisor
+        override fun newWorryLevel(worryLevel: Long, divisor: Int): Long = operation(worryLevel) / divisor
     }
 
     class MonkeyB(items: MutableList<Long>, operation: (Long) -> Long, testDivisor: Int, trueTarget: Int, falseTarget: Int) : Monkey(items, operation, testDivisor, trueTarget, falseTarget) {
-        override fun calNewWorryLevel(worryLevel: Long, divisor: Int): Long = operation(worryLevel) % divisor
+        override fun newWorryLevel(worryLevel: Long, divisor: Int): Long = operation(worryLevel) % divisor
     }
 }
