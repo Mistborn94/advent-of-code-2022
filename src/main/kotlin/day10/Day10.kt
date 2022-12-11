@@ -34,14 +34,12 @@ fun solveB(text: String): String {
 
     text.lines().forEach { line ->
         screen.add(draw(cycle, sprite))
-        if (line.startsWith("noop")) {
-            cycle += 1
-        } else if (line.startsWith("addx")) {
-            screen.add(draw(cycle + 1, sprite))
+        cycle += 1
+        if (line.startsWith("addx")) {
+            screen.add(draw(cycle, sprite))
             val (_, inc) = line.split(" ")
             sprite += inc.toInt()
-            cycle += 2
-
+            cycle += 1
         }
     }
 
