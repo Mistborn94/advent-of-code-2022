@@ -1,7 +1,6 @@
 package day12
 
 import helper.readDayFile
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -13,20 +12,15 @@ internal class Day12KtTest {
     @Test
     fun sample1() {
         val text = """
-            |
+            |Sabqponm
+            |abcryxxl
+            |accszExk
+            |acctuvwj
+            |abdefghi
         """.trimMargin().trimEnd()
 
-        assertEquals(0, solveA(text))
-        assertEquals(0, solveB(text))
-    }
-
-    @Test
-    @Ignore
-    fun sample2() {
-        val text = readDayFile(day, "sample2.in").readText().trimEnd()
-
-        assertEquals(0, solveA(text))
-        assertEquals(0, solveB(text))
+        assertEquals(31, solveA(text))
+        assertEquals(29, solveB(text))
     }
 
     @Test
@@ -35,10 +29,10 @@ internal class Day12KtTest {
 
         val solveA = solveA(lines)
         println("A: $solveA")
-        assertEquals(0, solveA)
+        assertEquals(472, solveA)
 
         val solveB = solveB(lines)
         println("B: $solveB")
-        assertEquals(0, solveB)
+        assertEquals(465, solveB)
     }
 }
