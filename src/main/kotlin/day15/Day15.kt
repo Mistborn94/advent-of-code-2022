@@ -1,6 +1,7 @@
 package day15
 
 import helper.CompositeRange
+import helper.cartesianProduct
 import helper.point.Point
 import kotlin.math.absoluteValue
 
@@ -66,6 +67,64 @@ fun solveB(text: String, targetMax: Int = 4_000_000): Long {
     }
 
     return foundX * 4_000_000L + foundY
+}
+
+fun solveB2(text: String, targetMax: Int = 4_000_000): Long {
+    val diamonds = parseInput(text).map { (sensor, beacon) ->
+        val radius = (beacon - sensor).abs() + 1
+        Diamond(sensor, radius)
+    }
+    val targetRange = 0..targetMax
+
+    return diamonds.asSequence().cartesianProduct(diamonds.asSequence())
+        .filter { (a, b) -> a != b }
+        .flatMap { (a, b) -> a.intersect(b).asSequence() }
+        .distinct()
+        .first { point -> point.x in targetRange && point.y in targetRange && diamonds.none { it.surrounds(point) } }
+        .let { (x, y) -> x * 4_000_000L + y }
+}
+
+data class Diamond(val center: Point, val radius: Int) {
+    private val xRange = center.x - radius..center.x + radius
+
+    private val a: Int get() = center.x
+    private val b: Int get() = center.y;
+    private val r: Int get() = radius
+
+    private val topLeft: Line by lazy { Line(-1, a - r + b) }
+    private val bottomRight: Line by lazy { Line(-1, a + r + b) }
+
+    private val topRight: Line by lazy { Line(1, -a - r + b) }
+    private val bottomLeft: Line by lazy { Line(1, -a + r + b) }
+
+    fun intersect(other: Diamond): List<Point> {
+        return listOf(
+            this.topLeft to other.topRight,
+            this.bottomRight to other.topRight,
+            this.topLeft to other.bottomLeft,
+            this.bottomRight to other.bottomLeft
+        ).flatMap { (a, b) ->
+            val x = (a.c - b.c) / 2
+            listOf(
+                Point(x, a.y(x)), Point(x, b.y(x))
+            )
+        }
+    }
+
+    fun surrounds(point: Point): Boolean {
+        val x = point.x
+        val y = point.y
+        return (x > xRange.first && x < xRange.last) && if (x < center.x) {
+            y > topLeft.y(x) && y < bottomLeft.y(x)
+        } else {
+            y > topRight.y(x) && y < bottomRight.y(x)
+        }
+    }
+
+}
+
+data class Line(val m: Int, val c: Int) {
+    fun y(x: Int): Int = m * x + c
 }
 
 fun coveredRange(point: Point, radius: Int, targetY: Int): IntRange? {

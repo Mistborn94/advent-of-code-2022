@@ -1,6 +1,7 @@
 package helper.point
 
-data class Point(val x: Int, val y: Int) {
+data class
+Point(val x: Int, val y: Int) {
 
     fun abs(): Int {
         return kotlin.math.abs(x) + kotlin.math.abs(y)
@@ -34,7 +35,6 @@ data class Point(val x: Int, val y: Int) {
         Point(x, y + 1),
         Point(x, y - 1)
     )
-
 
     fun diagonalNeighbours() = listOf(
         Point(x + 1, y + 1),
