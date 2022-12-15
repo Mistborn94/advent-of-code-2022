@@ -9,8 +9,7 @@ val pattern = """Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+),
 //In the row where y=2000000, how many positions cannot contain a beacon?
 fun solveA(text: String, targetY: Int = 2_000_000): Int {
     val sensors = parseInput(text)
-
-    val noBeacon = CompositeRange(emptyList())
+    val noBeacon = CompositeRange()
 
     sensors.forEach { (sensor, beacon) ->
         val radius = sensor.minus(beacon).abs()
@@ -44,7 +43,7 @@ fun solveB(text: String, targetMax: Int = 4_000_000): Long {
     var foundY: Int? = null
     val targetRange = 0..targetMax
     for (targetY in targetRange) {
-        val possibleRanges = CompositeRange(listOf(targetRange))
+        val possibleRanges = CompositeRange(targetRange)
         for ((sensor, beacon) in sensors) {
             val radius = sensor.minus(beacon).abs()
             val coveredRange = coveredRange(sensor, radius, targetY)

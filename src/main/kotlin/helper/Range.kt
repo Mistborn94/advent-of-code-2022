@@ -1,11 +1,12 @@
 package helper
 
-import java.util.*
+class CompositeRange private constructor(private var ranges: List<ClosedRange<Int>>) {
 
-class CompositeRange(private var ranges: List<ClosedRange<Int>>) {
+    constructor() : this(emptyList())
+    constructor(range: ClosedRange<Int>) : this(listOf(range))
 
     fun subtract(subtract: ClosedRange<Int>) {
-        val newRanges = LinkedList<ClosedRange<Int>>()
+        val newRanges = ArrayList<ClosedRange<Int>>(ranges.size + 2)
         ranges.forEach {
             val newEnd = subtract.endInclusive + 1
             val newStart = subtract.start - 1
@@ -28,8 +29,8 @@ class CompositeRange(private var ranges: List<ClosedRange<Int>>) {
             ranges = listOf(addition)
         }
 
-        val new = LinkedList<ClosedRange<Int>>()
-        val overlap = LinkedList<ClosedRange<Int>>()
+        val new = ArrayList<ClosedRange<Int>>(ranges.size)
+        val overlap = ArrayList<ClosedRange<Int>>(ranges.size)
         ranges.forEach {
             if (it.overlaps(addition)) {
                 overlap.add(it)
@@ -51,8 +52,7 @@ class CompositeRange(private var ranges: List<ClosedRange<Int>>) {
 }
 
 fun <T : Comparable<T>> ClosedRange<T>.overlaps(other: ClosedRange<T>): Boolean {
-    val first = if (this.start < other.start) this else other
-    val second = if (this.start < other.start) other else this
-    return second.start <= first.endInclusive
+    return this.start <= other.start && other.start <= this.endInclusive
+            || other.start < this.start && this.start <= other.endInclusive
 }
 
