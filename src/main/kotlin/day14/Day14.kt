@@ -70,11 +70,6 @@ fun restingPoint(grid: MutableList<MutableList<Char>>, startingPoint: Point): Po
     return position
 }
 
-private fun printGrid(grid: MutableList<MutableList<Char>>) {
-    println("Grid is: ")
-    println(grid.joinToString(separator = "\n") { it.joinToString(separator = "") })
-}
-
 fun solveB(text: String): Int {
     val rockPaths = parseInput(text)
 

@@ -35,6 +35,7 @@ data class Point(val x: Int, val y: Int) {
         Point(x, y - 1)
     )
 
+
     fun diagonalNeighbours() = listOf(
         Point(x + 1, y + 1),
         Point(x + 1, y - 1),
