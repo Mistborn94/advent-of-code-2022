@@ -29,7 +29,7 @@ internal class Day15KtTest {
         """.trimMargin().trimEnd()
 
         assertEquals(26, solveA(text, 10))
-        assertEquals(56000011, solveB2(text, 20))
+        assertEquals(56000011, solveB3(text, 20))
     }
 
     @Test
@@ -40,7 +40,7 @@ internal class Day15KtTest {
         println("A: $solveA")
         assertEquals(4961647, solveA)
 
-        val solveB = solveB2(lines)
+        val solveB = solveB3(lines)
         println("B: $solveB")
         assertEquals(12274327017867, solveB)
     }

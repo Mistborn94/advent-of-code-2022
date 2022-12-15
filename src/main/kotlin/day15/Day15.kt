@@ -2,6 +2,7 @@ package day15
 
 import helper.CompositeRange
 import helper.cartesianProduct
+import helper.overlap
 import helper.point.Point
 import kotlin.math.absoluteValue
 
@@ -84,12 +85,40 @@ fun solveB2(text: String, targetMax: Int = 4_000_000): Long {
         .let { (x, y) -> x * 4_000_000L + y }
 }
 
+fun solveB3(text: String, targetMax: Int = 4_000_000): Long {
+    val diamonds = parseInput(text).map { (sensor, beacon) ->
+        val radius = (beacon - sensor).abs()
+        Diamond(sensor, radius)
+    }
+    val targetRange = 0..targetMax
+
+    val boundaries = diamonds.asSequence()
+        .flatMap { it.boundaries(targetRange) }
+        .toList()
+
+    return boundaries
+        .mapNotNull { (line, range) ->
+            diamonds.forEach {
+                range.subtract(it.overlapRange(line))
+            }
+            if (range.isEmpty()) {
+                null
+            } else {
+                val x = range.first()
+                val y = line.y(x)
+                Point(x, y)
+            }
+        }
+        .first { (x, y) -> x in targetRange && y in targetRange }
+        .let { (x, y) -> x * 4_000_000L + y }
+}
+
 data class Diamond(val center: Point, val radius: Int) {
     private val xRange = center.x - radius..center.x + radius
 
     private val a: Int get() = center.x
     private val b: Int get() = center.y;
-    private val r: Int get() = radius
+    private val r: Int get() = radius + 1
 
     private val topLeft: Line by lazy { Line(-1, a - r + b) }
     private val bottomRight: Line by lazy { Line(-1, a + r + b) }
@@ -110,6 +139,43 @@ data class Diamond(val center: Point, val radius: Int) {
             )
         }
     }
+
+    fun boundaries(targetRange: IntRange): List<Pair<Line, CompositeRange>> {
+        val leftRange = (targetRange.first..center.x).overlap(xRange)
+        val rightRange = (center.x..targetRange.last).overlap(xRange)
+        return listOf(
+            topLeft to CompositeRange(leftRange),
+            bottomLeft to CompositeRange(leftRange),
+            topRight to CompositeRange(rightRange),
+            bottomRight to CompositeRange(rightRange),
+        )
+    }
+
+    fun overlapRange(line: Line): IntRange {
+        return if (line.m == -1) {
+            //parallel with top left/ bottom right
+            if (outOfBounds(topLeft.c, bottomRight.c, line.c)) {
+                IntRange.EMPTY
+            } else {
+                overlayRange(line.c - topLeft.c)
+            }
+        } else {
+            //parallel with top right/ bottom left
+            if (outOfBounds(topRight.c, bottomLeft.c, line.c)) {
+                IntRange.EMPTY
+            } else {
+                overlayRange(bottomLeft.c - line.c)
+            }
+        }
+    }
+
+    private fun overlayRange(offset: Int): IntRange {
+        val expectedLength = radius + offset % 2
+        val firstX = xRange.first + offset / 2
+        return firstX until firstX + expectedLength
+    }
+
+    private fun outOfBounds(top: Int, bottom: Int, line: Int) = line >= bottom || line <= top
 
     fun surrounds(point: Point): Boolean {
         val x = point.x
