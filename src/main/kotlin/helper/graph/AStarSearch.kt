@@ -43,12 +43,11 @@ inline fun <K> findShortestPathByPredicate(
         seenPoints.putAll(nextPoints.associate { it.vertex to SeenVertex(it.score, currentVertex) })
     }
 
-    println("Found end is $endVertex")
     return GraphSearchResult(start, endVertex, seenPoints)
 }
 
 class GraphSearchResult<K>(val start: K, val end: K, private val result: Map<K, SeenVertex<K>>) {
-    fun getScore(vertex: K = end) = result[vertex]?.score ?: throw IllegalStateException("Result for $vertex not available")
+    fun getScore(vertex: K = end) = result[vertex]?.cost ?: throw IllegalStateException("Result for $vertex not available")
 
     tailrec fun getPath(endVertex: K = end, pathEnd: List<K> = emptyList()): List<K> {
         val previous = result[endVertex]?.prev
@@ -61,7 +60,8 @@ class GraphSearchResult<K>(val start: K, val end: K, private val result: Map<K, 
     }
 }
 
-data class SeenVertex<K>(val score: Int, val prev: K?)
+data class SeenVertex<K>(val cost: Int, val prev: K?)
+
 
 data class ScoredVertex<K>(val vertex: K, val score: Int, val heuristic: Int) : Comparable<ScoredVertex<K>> {
     override fun compareTo(other: ScoredVertex<K>): Int = (score + heuristic).compareTo(other.score + heuristic)
