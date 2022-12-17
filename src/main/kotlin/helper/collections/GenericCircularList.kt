@@ -3,7 +3,7 @@ package helper.collections
 /**
  * Circular list containing unique values
  */
-class GenericCircularList<T>(var head: Node<T>, private val nodes: MutableMap<T, Node<T>>) {
+class GenericCircularList<T>(var head: Node<T>, private val nodes: MutableMap<T, Node<T>>) : Iterable<T> {
 
     fun getNode(value: T) = nodes.getValue(value)
 
@@ -49,11 +49,12 @@ class GenericCircularList<T>(var head: Node<T>, private val nodes: MutableMap<T,
     }
 
     companion object {
-        fun <T> ofValues(values: Collection<T>, nodes: MutableMap<T, Node<T>>): GenericCircularList<T> {
-            if (values.isEmpty()) {
+        fun <T> ofValues(values: Iterable<T>): GenericCircularList<T> {
+            val nodes: MutableMap<T, Node<T>> = mutableMapOf()
+            val iterator = values.iterator()
+            if (!iterator.hasNext()) {
                 throw IllegalArgumentException("Empty collections not supported")
             }
-            val iterator = values.iterator()
             val head = Node(iterator.next())
             nodes[head.value] = head
             var previous = head
@@ -68,6 +69,21 @@ class GenericCircularList<T>(var head: Node<T>, private val nodes: MutableMap<T,
             previous.next = head
             head.prev = previous
             return GenericCircularList(head, nodes)
+        }
+    }
+
+    override fun iterator(): PeekingIterator<T> {
+        return object : PeekingIterator<T> {
+            var currentNode = head
+            override fun hasNext(): Boolean = true
+            override fun next(): T {
+                val value = currentNode.value
+                currentNode = currentNode.next
+                return value
+            }
+
+            override fun peek(): T = currentNode.value
+
         }
     }
 
