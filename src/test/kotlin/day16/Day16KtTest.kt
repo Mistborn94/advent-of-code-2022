@@ -39,7 +39,6 @@ Valve JJ has flow rate=21; tunnel leads to valve II
     }
 
     @Test
-    @Ignore
     fun solve() {
         val lines = readDayFile(day, "input").readText().trimEnd()
 
@@ -49,6 +48,6 @@ Valve JJ has flow rate=21; tunnel leads to valve II
 
         val solveB = solveB(lines)
         println("B: $solveB")
-        assertEquals(0, solveB)
+        assertEquals(2100, solveB)
     }
 }
