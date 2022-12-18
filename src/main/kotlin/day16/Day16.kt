@@ -32,7 +32,7 @@ private fun parseInput(text: String): Day16 {
     }
 
     val valveRoomDistances = (valves.keys + STARTING_ROOM).associateWith { a ->
-        valves.keys.associateWith { b -> findShortestPath(a, b, { rooms[it]!! })!!.getScore() }
+        valves.keys.associateWith { b -> findShortestPath(a, b, { rooms[it]!! }).getScore() }
     }
 
     return Day16(valveRoomDistances, valves)
