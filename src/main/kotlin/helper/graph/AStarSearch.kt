@@ -9,29 +9,33 @@ typealias HeuristicFunction<K> = (K) -> Int
 /**
  * Implements A* search to find the shortest path between two vertices
  */
-inline fun <K> findShortestPath(
+fun <K> findShortestPath(
     start: K,
     end: K,
-    crossinline neighbours: NeighbourFunction<K>,
-    crossinline cost: CostFunction<K> = { _, _ -> 1 },
-    crossinline heuristic: HeuristicFunction<K> = { 0 }
-): GraphSearchResult<K> = findShortestPathByPredicate(start, { it == end }, neighbours, cost, heuristic)
+    neighbours: NeighbourFunction<K>,
+    cost: CostFunction<K> = { _, _ -> 1 },
+    heuristic: HeuristicFunction<K> = { 0 }
+): GraphSearchResult<K>? = findShortestPathByPredicate(start, { it == end }, neighbours, cost, heuristic)
 
 /**
  * Implements A* search to find the shortest path between two vertices using a predicate to determine the ending vertex
  */
-inline fun <K> findShortestPathByPredicate(
+fun <K> findShortestPathByPredicate(
     start: K,
     endFunction: (K) -> Boolean,
-    crossinline neighbours: NeighbourFunction<K>,
-    crossinline cost: CostFunction<K> = { _, _ -> 1 },
-    crossinline heuristic: HeuristicFunction<K> = { 0 }
-): GraphSearchResult<K> {
+    neighbours: NeighbourFunction<K>,
+    cost: CostFunction<K> = { _, _ -> 1 },
+    heuristic: HeuristicFunction<K> = { 0 }
+): GraphSearchResult<K>? {
     val toVisit = PriorityQueue(listOf(ScoredVertex(start, 0, heuristic(start))))
     var endVertex: K? = null
     val seenPoints: MutableMap<K, SeenVertex<K>> = mutableMapOf(start to SeenVertex(0, null))
 
     while (endVertex == null) {
+        if (toVisit.isEmpty()) {
+            return null
+        }
+
         val (currentVertex, currentScore) = toVisit.remove()
         endVertex = if (endFunction(currentVertex)) currentVertex else null
 

@@ -15,7 +15,7 @@ fun solveA(text: String): Int {
     val start: Point = grid.indexOf('E')
 
     val result = findShortestPath(start, end, { point -> getNeighboursReversed(grid, point) })
-    return result.getScore()
+    return result!!.getScore()
 }
 
 fun getNeighboursReversed(grid: List<List<Char>>, point: Point): List<Point> {
@@ -37,5 +37,5 @@ fun solveB(text: String): Int {
     val start: Point = grid.indexOf('E')
 
     val result = findShortestPathByPredicate(start, endTest, { point -> getNeighboursReversed(grid, point) })
-    return result.getScore()
+    return result!!.getScore()
 }
