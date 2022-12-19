@@ -3,7 +3,7 @@ package day19
 import helper.enumMap
 import helper.enumMapOf
 import helper.graph.LongestPathNode
-import helper.graph.findLongestPathInTime
+import helper.graph.findLongestPathInTimeBfs
 import java.util.*
 
 val regex = ("Blueprint (\\d+): " +
@@ -76,7 +76,7 @@ class Blueprint(
     fun simulate(endTime: Int): Int {
         val startingState = mapOf(ResourceType.ORE to 1)
         val start = SearchState(0, emptyMap(), startingState, endTime, this)
-        val end = findLongestPathInTime(start, endTime)
+        val end = findLongestPathInTimeBfs(start, endTime)
         return end.score
     }
 

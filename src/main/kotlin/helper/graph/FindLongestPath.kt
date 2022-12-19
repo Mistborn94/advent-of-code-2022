@@ -2,7 +2,12 @@ package helper.graph
 
 import java.util.*
 
-fun <T : LongestPathNode<T, K>, K> findLongestPathInTime(
+/**
+ * Use BFS to find the longest path reachable in a time period
+ *
+ * Only works with time steps of 1
+ */
+fun <T : LongestPathNode<T, K>, K> findLongestPathInTimeBfs(
     start: T,
     endTime: Int
 ): T {
