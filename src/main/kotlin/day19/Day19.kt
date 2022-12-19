@@ -2,6 +2,8 @@ package day19
 
 import helper.enumMap
 import helper.enumMapOf
+import helper.graph.LongestPathNode
+import helper.graph.findLongestPathInTime
 import java.util.*
 
 val regex = ("Blueprint (\\d+): " +
@@ -50,7 +52,6 @@ fun solveB(text: String): Int {
     val blueprints = text.lines().map { parseBlueprint(it) }.take(3)
 
     val items = blueprints.map { it.simulate(32) }
-    println("Found geode counts $items")
     return items.reduce { acc, i -> i * acc }
 }
 
@@ -74,43 +75,9 @@ class Blueprint(
 
     fun simulate(endTime: Int): Int {
         val startingState = mapOf(ResourceType.ORE to 1)
-
-        val start = SearchState(0, emptyMap(), startingState, endTime)
-        val toVisit = PriorityQueue(listOf(start))
-        var endVertex: SearchState? = null
-        val seenConfigurations = mutableMapOf<ResourceCounts, MutableSet<SearchState>>()
-        val nextGeneration = mutableMapOf<ResourceCounts, MutableSet<SearchState>>()
-
-        while (endVertex == null) {
-            if (toVisit.isEmpty()) {
-                nextGeneration.forEach { (_, values) ->
-                    toVisit.addAll(values)
-                }
-                nextGeneration.clear()
-            }
-
-            val visit = toVisit.remove()
-
-            if (visit.minute == endTime) {
-                endVertex = visit
-            } else {
-                val neighbours = visit.neighbours(this)
-                neighbours.forEach { neighbour ->
-                    val allSeen = seenConfigurations.getOrPut(neighbour.robots) { mutableSetOf() }
-                    val nextGenSeen = nextGeneration.getOrPut(neighbour.robots) { mutableSetOf() }
-
-                    val noneBetter = allSeen.none { it.canReplace(neighbour) }
-                    if (noneBetter) {
-                        nextGenSeen.removeIf { neighbour.canReplace(it) }
-                        nextGenSeen.add(neighbour)
-                        allSeen.removeIf { neighbour.canReplace(it) }
-                        allSeen.add(neighbour)
-                    }
-                }
-            }
-        }
-
-        return endVertex.score
+        val start = SearchState(0, emptyMap(), startingState, endTime, this)
+        val end = findLongestPathInTime(start, endTime)
+        return end.score
     }
 
     fun canAfford(resources: SearchState, robotType: ResourceType): Boolean {
@@ -124,12 +91,14 @@ data class SearchState(
     val minute: Int,
     val resources: ResourceCounts,
     val robots: ResourceCounts,
-    private val endTime: Int
-) : Comparable<SearchState> {
+    private val endTime: Int,
+    private val blueprint: Blueprint
+) : LongestPathNode<SearchState, ResourceCounts> {
 
-    val score get() = resourceCount(ResourceType.GEODE)
+    override val score get() = resourceCount(ResourceType.GEODE)
+    override fun cacheKey() = robots
 
-    fun neighbours(blueprint: Blueprint): List<SearchState> {
+    override fun neighbours(): List<SearchState> {
         val canAffordOre = blueprint.canAfford(this, ResourceType.ORE)
         val maxOreCost = blueprint.robotOreCosts.filterKeys { it != ResourceType.ORE }.values.max()
 
@@ -179,8 +148,8 @@ data class SearchState(
     private fun nextSearchState(blueprint: Blueprint, robotType: ResourceType?): SearchState {
         val newResources = getNewResources(blueprint, robotType, robots)
         return when (robotType) {
-            null -> SearchState(minute + 1, newResources, robots, endTime)
-            else -> SearchState(minute + 1, newResources, robots.increment(robotType, 1), endTime)
+            null -> SearchState(minute + 1, newResources, robots, endTime, blueprint)
+            else -> SearchState(minute + 1, newResources, robots.increment(robotType, 1), endTime, blueprint)
         }
     }
 
@@ -200,11 +169,9 @@ data class SearchState(
         return newResources
     }
 
-    override fun compareTo(other: SearchState): Int = other.score.compareTo(score)
-
     override fun toString() = "Minute $minute : Resources=$resources, Robots=${robots}, Score=${score})"
 
-    fun canReplace(other: SearchState): Boolean {
+    override fun canReplace(other: SearchState): Boolean {
         return robots == other.robots && minute >= other.minute && resourceMore(other, ResourceType.GEODE) &&
                 resourceMore(other, ResourceType.OBSIDIAN) &&
                 resourceMore(other, ResourceType.CLAY) &&
