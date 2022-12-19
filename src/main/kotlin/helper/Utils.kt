@@ -1,5 +1,6 @@
 package helper
 
+import java.util.*
 import java.util.concurrent.BlockingQueue
 import java.util.stream.Stream
 import kotlin.math.absoluteValue
@@ -44,6 +45,14 @@ fun <T> ArrayList<T>.resize(minimumSize: Int, supplier: () -> T) {
     ensureCapacity(minimumSize)
     while (size < minimumSize) {
         add(supplier())
+    }
+}
+
+fun <T> MutableCollection<T>.addAllIf(elements: Collection<T>, predicate: (T) -> Boolean) {
+    elements.forEach {
+        if (predicate(it)) {
+            this.add(it)
+        }
     }
 }
 
@@ -97,3 +106,10 @@ tailrec fun greatestCommonDivisor(a: Long, b: Long): Long {
 }
 
 fun lowestCommonMultiple(a: Long, b: Long): Long = (a * b) / greatestCommonDivisor(a, b)
+inline fun <reified K : Enum<K>, reified V> enumMapOf(vararg pairs: Pair<K, V>) = pairs.toMap(enumMap())
+inline fun <reified K : Enum<K>, reified V> enumMap(): EnumMap<K, V> = EnumMap(K::class.java)
+inline fun <reified K : Enum<K>, reified V> enumMap(map: Map<K, V>): EnumMap<K, V> = when (map) {
+    is EnumMap -> map
+    emptyMap<K, V>() -> enumMap()
+    else -> EnumMap(map)
+}
