@@ -30,13 +30,7 @@ fun buildExpressionTree(name: String, monkeyMap: Map<String, String>): MathExpre
         val split = job.split(" ")
         val firstNumber = buildExpressionTree(split[0], monkeyMap)
         val secondNumber = buildExpressionTree(split[2], monkeyMap)
-        val operatorEnum = when (split[1]) {
-            "+" -> Operator.PLUS
-            "-" -> Operator.MINUS
-            "*" -> Operator.MUL
-            "/" -> Operator.DIV
-            else -> throw IllegalArgumentException(job)
-        }
+        val operatorEnum = Operator.parse(split[1])
         Equation.build(firstNumber, operatorEnum, secondNumber)
     }
 }

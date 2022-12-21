@@ -28,6 +28,17 @@ sealed class MathExpression {
         abstract fun solveRight(target: MathExpression, left: MathExpression): MathExpression
         abstract fun solveLeft(target: MathExpression, right: MathExpression): MathExpression
         override fun toString(): String = char.toString()
+
+        companion object {
+            fun parse(string: String) = when (string) {
+                "+" -> PLUS
+                "-" -> MINUS
+                "*" -> MUL
+                "/" -> DIV
+                else -> throw IllegalArgumentException("Unknown operator $string")
+            }
+
+        }
     }
 
     fun solve(): Long = trySolve() ?: throw IllegalArgumentException("Unknown can't be solved")
