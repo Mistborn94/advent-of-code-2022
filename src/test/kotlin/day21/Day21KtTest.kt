@@ -12,12 +12,25 @@ internal class Day21KtTest {
 
     @Test
     fun sample1() {
-        val text = """
-            |
+        val text = """|root: pppw + sjmn
+dbpl: 5
+cczh: sllz + lgvd
+zczc: 2
+ptdq: humn - dvpt
+dvpt: 3
+lfqf: 4
+humn: 5
+ljgn: 2
+sjmn: drzm * dbpl
+sllz: 4
+pppw: cczh / lfqf
+lgvd: ljgn * ptdq
+drzm: hmdt - zczc
+hmdt: 32
         """.trimMargin().trimEnd()
 
-        assertEquals(0, solveA(text))
-        assertEquals(0, solveB(text))
+        assertEquals(152, solveA(text))
+        assertEquals(301, solveB(text))
     }
 
     @Test
@@ -35,10 +48,10 @@ internal class Day21KtTest {
 
         val solveA = solveA(lines)
         println("A: $solveA")
-        assertEquals(0, solveA)
+        assertEquals(87457751482938, solveA)
 
         val solveB = solveB(lines)
         println("B: $solveB")
-        assertEquals(0, solveB)
+        assertEquals(3221245824363, solveB)
     }
 }
