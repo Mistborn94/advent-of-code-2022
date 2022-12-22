@@ -13,11 +13,24 @@ internal class Day22KtTest {
     @Test
     fun sample1() {
         val text = """
+            |        ...#
+            |        .#..
+            |        #...      
+            |        ....
+            |...#.......#
+            |........#...
+            |..#....#....
+            |..........#.
+            |        ...#....
+            |        .....#..
+            |        .#......
+            |        ......#.
             |
+            |10R5L5R10L4R5L5
         """.trimMargin().trimEnd()
 
-        assertEquals(0, solveA(text))
-        assertEquals(0, solveB(text))
+        assertEquals(6032, solveA(text))
+        assertEquals(5031, solveB(text, 4, "sample"))
     }
 
     @Test
@@ -35,10 +48,10 @@ internal class Day22KtTest {
 
         val solveA = solveA(lines)
         println("A: $solveA")
-        assertEquals(0, solveA)
+        assertEquals(80392, solveA)
 
         val solveB = solveB(lines)
         println("B: $solveB")
-        assertEquals(0, solveB)
+        assertEquals(19534, solveB)
     }
 }
