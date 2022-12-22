@@ -110,7 +110,7 @@ fun solveA(text: String): Int {
         UP -> 3
     }
 
-//    println("End is row=${currentPosition.y + 1}, col=${currentPosition.x + 1} $currentDirection")
+//    println("End is row=${currentPosition.y + 1}, col=${currentPosition.x + 1} $currentDirection:")
     return (currentPosition.y + 1) * 1000 + (currentPosition.x + 1) * 4 + facingScore
 }
 
@@ -123,7 +123,6 @@ private fun printPath(board: List<List<Char>>, path: MutableList<Pair<Point, Dir
     val mutableBoard = board.map { it.toMutableList() }
     path.forEach { (point, direction) -> mutableBoard[point] = direction.char }
     mutableBoard[path.last().first] = '*'
-    println("With Path:")
     println(mutableBoard.joinToString("\n") { it.joinToString(separator = "", prefix = "|", postfix = "|") })
 }
 
@@ -233,56 +232,39 @@ fun solveB(text: String, cubeSize: Int = 50, problemName: String = "me"): Int {
             for (i in 0 until nextInt) {
                 val nextPos = currentPosition + currentDirection.point
                 if (nextPos !in currentFace) {
-
                     //do wrap around
                     val currentFaceMap = cubeMap[currentFaceId]!!
                     val (nextFaceId, nextDirection) = currentFaceMap[currentDirection]!!
                     val (nextFace, nextFaceOffset) = cubeFaces[nextFaceId]!!
-                    val nextFacePos = when (nextDirection) {
-                        currentDirection -> {
-                            when (currentDirection) {
-                                LEFT -> Point(cubeSize - 1, currentPosition.y)
-                                RIGHT -> Point(0, currentPosition.y)
-                                UP -> Point(currentPosition.x, cubeSize - 1)
-                                DOWN -> Point(currentPosition.x, 0)
+                    val constantComponent = when (nextDirection) {
+                        RIGHT, DOWN -> 0
+                        LEFT, UP -> cubeSize - 1
+                    }
+
+                    val nextFacePos = when (nextDirection.orientation) {
+                        HORIZONTAL -> {
+                            val y = when (nextDirection) {
+                                currentDirection -> currentPosition.y
+                                currentDirection.opposite -> cubeSize - currentPosition.y - 1
+                                currentDirection.left -> cubeSize - currentPosition.x - 1
+                                currentDirection.right -> currentPosition.x
+                                else -> throw IllegalStateException("Impossible")
                             }
+                            Point(constantComponent, y)
                         }
 
-                        currentDirection.opposite -> {
-                            when (currentDirection) {
-                                LEFT -> Point(0, cubeSize - currentPosition.y - 1)
-                                RIGHT -> Point(cubeSize - 1, cubeSize - currentPosition.y - 1)
-                                UP -> Point(cubeSize - currentPosition.x - 1, 0)
-                                DOWN -> Point(cubeSize - currentPosition.x - 1, cubeSize - 1)
+                        VERTICAL -> {
+                            val x = when (nextDirection) {
+                                currentDirection -> currentPosition.x
+                                currentDirection.opposite -> cubeSize - currentPosition.x - 1
+                                currentDirection.left -> currentPosition.y
+                                currentDirection.right -> cubeSize - currentPosition.y - 1
+                                else -> throw IllegalStateException("Impossible")
                             }
-                        }
-
-                        currentDirection.left -> {
-                            when (currentDirection) {
-                                //Left to down
-                                LEFT -> Point(currentPosition.y, 0)
-                                //Right to up
-                                RIGHT -> Point(currentPosition.y, cubeSize - 1)
-                                //Up to left
-                                UP -> Point(cubeSize - 1, cubeSize - currentPosition.x - 1)
-                                //Down to right
-                                DOWN -> Point(0, cubeSize - currentPosition.x - 1)
-                            }
-                        }
-
-                        else -> { //nextDirection == currentDirection.right
-                            when (currentDirection) {
-                                //Left to up
-                                LEFT -> Point(cubeSize - currentPosition.y - 1, cubeSize - 1)
-                                //Right to down
-                                RIGHT -> Point(cubeSize - currentPosition.y - 1, 0)
-                                //Up to right
-                                UP -> Point(0, currentPosition.x)
-                                //Down to left
-                                DOWN -> Point(cubeSize - 1, currentPosition.x)
-                            }
+                            Point(x, constantComponent)
                         }
                     }
+
                     if (nextFace[nextFacePos] == '#') {
                         break
                     } else {
@@ -300,7 +282,6 @@ fun solveB(text: String, cubeSize: Int = 50, problemName: String = "me"): Int {
                 }
                 path.add(currentPosition.toGlobalCoord(currentFaceOffset, cubeSize) to currentDirection)
             }
-            //do move
         } else if (next == "L") {
             currentDirection = currentDirection.left
             path.add(currentPosition.toGlobalCoord(currentFaceOffset, cubeSize) to currentDirection)
@@ -308,7 +289,7 @@ fun solveB(text: String, cubeSize: Int = 50, problemName: String = "me"): Int {
             currentDirection = currentDirection.right
             path.add(currentPosition.toGlobalCoord(currentFaceOffset, cubeSize) to currentDirection)
         }
-//        println("Finished instruction $next, position is $currentPosition, $currentDirection")
+//        println("Finished instruction $next, position is $currentPosition, $currentDirection:")
 //        printPath(board, path)
     }
 
