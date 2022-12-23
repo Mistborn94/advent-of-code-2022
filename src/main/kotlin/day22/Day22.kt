@@ -1,42 +1,12 @@
 package day22
 
-import day22.Direction.*
-import day22.Orientation.HORIZONTAL
-import day22.Orientation.VERTICAL
 import helper.point.*
+import helper.point.Direction.*
+import helper.point.Orientation.HORIZONTAL
+import helper.point.Orientation.VERTICAL
 
-enum class Orientation {
-    HORIZONTAL,
-    VERTICAL
-}
-
-enum class Direction(val point: Point, val char: Char, val orientation: Orientation) {
-
-    UP(Point(0, -1), '^', VERTICAL) {
-        override val left get() = LEFT
-        override val right get() = RIGHT
-        override val opposite get() = DOWN
-    },
-    LEFT(Point(-1, 0), '<', HORIZONTAL) {
-        override val left get() = DOWN
-        override val right get() = UP
-        override val opposite get() = RIGHT
-    },
-    DOWN(Point(0, 1), 'v', VERTICAL) {
-        override val left get() = RIGHT
-        override val right get() = LEFT
-        override val opposite get() = UP
-    },
-    RIGHT(Point(1, 0), '>', HORIZONTAL) {
-        override val left get() = UP
-        override val right get() = DOWN
-        override val opposite get() = LEFT
-    };
-
-    abstract val left: Direction
-    abstract val right: Direction
-    abstract val opposite: Direction
-}
+val directionPoints = DirectionPoints.downPositive
+val Direction.point get() = directionPoints[this]
 
 //Follow the path given in the monkeys' notes. What is the final password?
 //A number indicates the number of tiles to move in the direction you are facing.

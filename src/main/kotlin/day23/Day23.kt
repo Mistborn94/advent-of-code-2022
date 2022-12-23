@@ -1,11 +1,14 @@
 package day23
 
+import helper.point.Direction
+import helper.point.DirectionPoints
 import helper.point.Point
 
-val north = Point(0, -1)
-val east = Point(-1, 0)
-val south = Point(0, 1)
-val west = Point(1, 0)
+val directions = DirectionPoints.downPositive
+val north = directions[Direction.NORTH]
+val east = directions[Direction.EAST]
+val south = directions[Direction.SOUTH]
+val west = directions[Direction.WEST]
 
 val globalRule = listOf(
     Rule(
@@ -19,8 +22,8 @@ val globalRule = listOf(
 val directionRules = listOf(
     rule("North", north, east, west),
     rule("South", south, east, west),
-    rule("West", east, north, south),
-    rule("East", west, north, south),
+    rule("West", west, north, south),
+    rule("East", east, north, south),
 )
 
 //Simulate the Elves' process and find the smallest rectangle that contains the Elves
