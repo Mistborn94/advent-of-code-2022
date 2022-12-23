@@ -1,10 +1,12 @@
 package day24
 
-fun solveA(text: String): Int {
+import helper.Debug
+
+fun solveA(text: String, debug: Debug = Debug.Disabled): Int {
     return 0
 }
 
 
-fun solveB(text: String): Int {
+fun solveB(text: String, debug: Debug = Debug.Disabled): Int {
     return 0
 }

@@ -1,5 +1,6 @@
 package day23
 
+import helper.Debug
 import helper.point.Direction
 import helper.point.DirectionPoints
 import helper.point.Point
@@ -28,7 +29,7 @@ val directionRules = listOf(
 
 //Simulate the Elves' process and find the smallest rectangle that contains the Elves
 // after 10 rounds. How many empty ground tiles does that rectangle contain?
-fun solveA(text: String, repeat: Int = 10): Int {
+fun solveA(text: String, repeat: Int = 10, debug: Debug): Int {
     /*
      If no other Elves are in one of those eight positions, the Elf does not do anything
     If there is no Elf in the N, NE, or NW adjacent positions, the Elf proposes moving north one step.
@@ -38,11 +39,18 @@ fun solveA(text: String, repeat: Int = 10): Int {
 */
     var elves: Set<Elf> = parseElves(text)
 
-//    println("Start")
-//    printBoard(elves)
-    repeat(repeat) { iteration ->
-        val (newElves, _) = simulateRound(iteration, elves)
+    debug {
+        println("Start")
+        printBoard(elves)
+    }
+    repeat(repeat) { round ->
+        val (newElves, _) = simulateRound(round, elves)
         elves = newElves
+
+        debug {
+            println("End of Round ${round + 1}")
+            printBoard(elves)
+        }
     }
 
     val minX = elves.minOf { it.position.x }
@@ -85,8 +93,6 @@ private fun simulateRound(
             elf
         }
     }
-//    println("End of Round ${round + 1}")
-//    printBoard(nextElves)
     return nextElves to moveCount
 }
 
@@ -116,17 +122,26 @@ fun printBoard(elves: Set<Elf>) {
 
 private fun rule(name: String, first: Point, o1: Point, o2: Point) = Rule(name, listOf(first, first + o1, first + o2), first)
 
-fun solveB(text: String): Int {
+fun solveB(text: String, debug: Debug): Int {
     var elves: Set<Elf> = parseElves(text)
 
-    var iteration = 0
+    var round = 0
 
+    debug {
+        println("Start")
+        printBoard(elves)
+    }
     do {
-        val (newElves, moveCount) = simulateRound(iteration++, elves)
+        val (newElves, moveCount) = simulateRound(round++, elves)
         elves = newElves
+
+        debug {
+            println("End of Round ${round + 1}")
+            printBoard(elves)
+        }
     } while (moveCount != 0)
 
-    return iteration
+    return round
 }
 
 data class Elf(val id: Int, val position: Point) {

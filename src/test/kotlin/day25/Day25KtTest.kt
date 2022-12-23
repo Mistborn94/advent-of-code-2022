@@ -1,5 +1,6 @@
 package day25
 
+import helper.Debug
 import helper.readDayFile
 import kotlin.test.Ignore
 import kotlin.test.Test
@@ -16,8 +17,8 @@ internal class Day25KtTest {
             |
         """.trimMargin().trimEnd()
 
-        assertEquals(0, solveA(text))
-        assertEquals(0, solveB(text))
+        assertEquals(0, solveA(text, Debug.Enabled))
+        assertEquals(0, solveB(text, Debug.Enabled))
     }
 
     @Test
@@ -25,8 +26,8 @@ internal class Day25KtTest {
     fun sample2() {
         val text = readDayFile(day, "sample2.in").readText().trimEnd()
 
-        assertEquals(0, solveA(text))
-        assertEquals(0, solveB(text))
+        assertEquals(0, solveA(text, Debug.Enabled))
+        assertEquals(0, solveB(text, Debug.Disabled))
     }
 
     @Test
