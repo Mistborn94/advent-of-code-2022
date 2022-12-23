@@ -4,7 +4,6 @@ import helper.readDayFile
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-
 internal class Day23KtTest {
 
     private val day = 23

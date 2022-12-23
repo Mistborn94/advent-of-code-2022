@@ -7,18 +7,15 @@ val east = Point(-1, 0)
 val south = Point(0, 1)
 val west = Point(1, 0)
 
-val surroundingOffsets = listOf(
-    north,
-    north + east,
-    east,
-    east + south,
-    south,
-    south + west,
-    west,
-    west + north
+val globalRule = listOf(
+    Rule(
+        "Surrounding", listOf(
+            north, north + east, north + west,
+            south, south + west, south + east,
+            east, west
+        ), Point(0, 0)
+    )
 )
-
-val globalRule = listOf(Rule("Surrounding", surroundingOffsets, Point(0, 0)))
 val directionRules = listOf(
     rule("North", north, east, west),
     rule("South", south, east, west),
@@ -40,8 +37,6 @@ fun solveA(text: String, repeat: Int = 10): Int {
 
 //    println("Start")
 //    printBoard(elves)
-    val lastMatchedRules = mutableMapOf<Int, Int>()
-
     repeat(repeat) { iteration ->
         val (newElves, _) = simulateRound(iteration, elves)
         elves = newElves
@@ -87,18 +82,20 @@ private fun simulateRound(
             elf
         }
     }
-
+//    println("End of Round ${round + 1}")
+//    printBoard(nextElves)
     return nextElves to moveCount
 }
 
 fun printBoard(elves: Set<Elf>) {
     val elfPositions = elves.mapTo(mutableSetOf()) { it.position }
-    val minX = elfPositions.minOf { it.x } - 1
-    val maxX = elfPositions.maxOf { it.x } + 1
+    val minX = elfPositions.minOf { it.x }
+    val maxX = elfPositions.maxOf { it.x }
 
-    val minY = elfPositions.minOf { it.y } - 1
-    val maxY = elfPositions.maxOf { it.y } + 1
+    val minY = elfPositions.minOf { it.y }
+    val maxY = elfPositions.maxOf { it.y }
 
+    println("Top Left is ($minX,$minY)")
     println(buildString {
         for (y in minY..maxY) {
             for (x in minX..maxX) {
@@ -128,7 +125,6 @@ fun solveB(text: String): Int {
 
     return iteration
 }
-
 
 data class Elf(val id: Int, val position: Point) {
     fun moveTo(new: Point): Elf {
