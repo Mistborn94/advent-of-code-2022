@@ -1,7 +1,6 @@
 package day8
 
 import helper.readDayFile
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -22,15 +21,6 @@ internal class Day8KtTest {
 
         assertEquals(21, solveA(text))
         assertEquals(8, solveB(text))
-    }
-
-    @Test
-    @Ignore
-    fun sample2() {
-        val text = readDayFile(day, "sample2.in").readText().trimEnd()
-
-        assertEquals(0, solveA(text))
-        assertEquals(0, solveB(text))
     }
 
     @Test

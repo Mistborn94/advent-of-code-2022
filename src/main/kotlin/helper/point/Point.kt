@@ -1,7 +1,6 @@
 package helper.point
 
-data class
-Point(val x: Int, val y: Int) {
+data class Point(val x: Int, val y: Int) {
 
     fun abs(): Int {
         return kotlin.math.abs(x) + kotlin.math.abs(y)
@@ -48,19 +47,19 @@ Point(val x: Int, val y: Int) {
     }
 }
 
-operator fun <E> List<List<E>>.contains(point: Point): Boolean = this.isNotEmpty() && point.y in this.indices && point.x in this.first().indices
+operator fun <E> Collection<Collection<E>>.contains(point: Point): Boolean = this.isNotEmpty() && point.y in this.indices && point.x in this.first().indices
 operator fun <E> List<List<E>>.get(point: Point) = this[point.y][point.x]
 operator fun <E> List<MutableList<E>>.set(point: Point, value: E) {
     this[point.y][point.x] = value
 }
 
-fun <E> List<List<E>>.points(): ArrayList<Point> {
+fun <E> List<Collection<E>>.points(): ArrayList<Point> {
     return indices.flatMapTo(ArrayList()) { y ->
         this[y].indices.map { x -> Point(x, y) }
     }
 }
 
-fun <T> List<List<T>>.indexOf(item: T): Point {
+fun <T> List<Collection<T>>.indexOf(item: T): Point {
     val y = this.indexOfFirst { it.contains(item) }
     return Point(this[y].indexOf(item), y)
 }

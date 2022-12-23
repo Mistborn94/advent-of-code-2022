@@ -1,7 +1,6 @@
 package day21
 
 import helper.readDayFile
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -33,14 +32,6 @@ hmdt: 32
         assertEquals(301, solveB(text))
     }
 
-    @Test
-    @Ignore
-    fun sample2() {
-        val text = readDayFile(day, "sample2.in").readText().trimEnd()
-
-        assertEquals(0, solveA(text))
-        assertEquals(0, solveB(text))
-    }
 
     @Test
     fun solve() {

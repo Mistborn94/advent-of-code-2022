@@ -1,7 +1,6 @@
 package day16
 
 import helper.readDayFile
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -27,15 +26,6 @@ Valve JJ has flow rate=21; tunnel leads to valve II
 
         assertEquals(1651, solveA(text))
         assertEquals(1707, solveB(text))
-    }
-
-    @Test
-    @Ignore
-    fun sample2() {
-        val text = readDayFile(day, "sample2.in").readText().trimEnd()
-
-        assertEquals(0, solveA(text))
-        assertEquals(0, solveB(text))
     }
 
     @Test
