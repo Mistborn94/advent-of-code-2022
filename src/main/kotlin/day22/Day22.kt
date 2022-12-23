@@ -79,10 +79,7 @@ fun solveA(text: String): Int {
                     }
                     if (board[possibleNext] == '.') {
                         currentPosition = possibleNext
-                    } else {
-//                        println("Found ${board[possibleNext]} after wraparound")
                     }
-                    //do wrap around
                 } else if (board[nextPos] == '#') {
                     break
                 } else {
@@ -126,6 +123,7 @@ private fun printPath(board: List<List<Char>>, path: MutableList<Pair<Point, Dir
     println(mutableBoard.joinToString("\n") { it.joinToString(separator = "", prefix = "|", postfix = "|") })
 }
 
+//Encodes the transitions between faces
 val problemSets: Map<String, Map<Int, Map<Direction, Pair<Int, Direction>>>> = mapOf(
     "sample" to mapOf(
         1 to mapOf(
