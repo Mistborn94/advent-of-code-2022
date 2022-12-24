@@ -54,8 +54,9 @@ class GraphSearchResult<K>(val start: K, val end: K?, private val result: Map<K,
     fun getScore(vertex: K) = result[vertex]?.cost ?: throw IllegalStateException("Result for $vertex not available")
     fun getScore() = end?.let { getScore(it) } ?: throw IllegalStateException("No path found")
 
-    fun gePath() = end?.let { getPath(it, emptyList()) } ?: throw IllegalStateException("No path found")
+    fun getPath() = end?.let { getPath(it, emptyList()) } ?: throw IllegalStateException("No path found")
     fun seen(): Set<K> = result.keys
+    fun end(): K = end ?: throw IllegalStateException("No path found")
 
     private tailrec fun getPath(endVertex: K, pathEnd: List<K>): List<K> {
         val previous = result[endVertex]?.prev
@@ -70,7 +71,6 @@ class GraphSearchResult<K>(val start: K, val end: K?, private val result: Map<K,
 
 data class SeenVertex<K>(val cost: Int, val prev: K?)
 
-
 data class ScoredVertex<K>(val vertex: K, val score: Int, val heuristic: Int) : Comparable<ScoredVertex<K>> {
-    override fun compareTo(other: ScoredVertex<K>): Int = (score + heuristic).compareTo(other.score + heuristic)
+    override fun compareTo(other: ScoredVertex<K>): Int = (score + heuristic).compareTo(other.score + other.heuristic)
 }

@@ -11,7 +11,6 @@ sealed interface Debug {
     }
 
     object Disabled : Debug {
-        override fun invoke(action: () -> Unit) {/*Do nothing*/
-        }
+        override fun invoke(action: () -> Unit) {}
     }
 }
