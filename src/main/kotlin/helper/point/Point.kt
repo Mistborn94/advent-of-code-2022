@@ -49,11 +49,12 @@ data class Point(val x: Int, val y: Int) {
 
 operator fun <E> Collection<Collection<E>>.contains(point: Point): Boolean = this.isNotEmpty() && point.y in this.indices && point.x in this.first().indices
 operator fun <E> List<List<E>>.get(point: Point) = this[point.y][point.x]
-operator fun <E> Array<Array<E>>.get(point: Point) = this[point.y][point.x]
 operator fun <E> List<MutableList<E>>.set(point: Point, value: E) {
     this[point.y][point.x] = value
 }
 
+operator fun <E> Array<Array<E>>.get(point: Point) = this[point.y][point.x]
+operator fun <E> Array<Array<E>>.contains(point: Point): Boolean = this.isNotEmpty() && point.y in this.indices && point.x in this.first().indices
 operator fun <E> Array<Array<E>>.set(point: Point, value: E) {
     this[point.y][point.x] = value
 }

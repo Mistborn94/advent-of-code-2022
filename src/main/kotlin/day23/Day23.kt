@@ -12,13 +12,7 @@ val south = directions[Direction.SOUTH]
 val west = directions[Direction.WEST]
 
 val globalRule = listOf(
-    Rule(
-        "Surrounding", listOf(
-            north, north + east, north + west,
-            south, south + west, south + east,
-            east, west
-        ), Point(0, 0)
-    )
+    Rule("Surrounding", Point.ZERO.neighbours() + Point.ZERO.diagonalNeighbours(), Point.ZERO)
 )
 val directionRules = listOf(
     rule("North", north, east, west),
@@ -96,7 +90,7 @@ private fun simulateRound(
     return nextElves to moveCount
 }
 
-fun printBoard(elves: Set<Elf>) {
+private fun printBoard(elves: Set<Elf>) {
     val elfPositions = elves.mapTo(mutableSetOf()) { it.position }
     val minX = elfPositions.minOf { it.x }
     val maxX = elfPositions.maxOf { it.x }

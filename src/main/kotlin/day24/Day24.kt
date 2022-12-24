@@ -8,7 +8,7 @@ import helper.point.*
 val directionPoints = DirectionPoints.downPositive
 val Direction.point get() = directionPoints[this]
 
-class Day24(text: String, val debug: Debug = Debug.Disabled, private val maxRounds: Int = 20_000) {
+class Day24(map: List<String>, private val maxRounds: Int, val debug: Debug) {
 
     val start: Point
     val end: Point
@@ -17,7 +17,6 @@ class Day24(text: String, val debug: Debug = Debug.Disabled, private val maxRoun
     private val blizzardPositionsByStep: MutableMap<Int, Set<Point>>
 
     init {
-        val map = text.lines().map { it.toList() }
         start = Point(map.first().indexOf('.'), 0)
         end = Point(map.last().indexOf('.'), map.lastIndex)
         valleyBounds = Rectangle(1 until map.first().lastIndex, 1 until map.lastIndex)
@@ -89,17 +88,18 @@ class Day24(text: String, val debug: Debug = Debug.Disabled, private val maxRoun
 
     private fun printBoard(round: Int, position: Point) {
         val currentRoundBlizzards = blizzardsByStep[round]!!
-        val rows = valleyBounds.yRange.count() + 2
-        val columns = valleyBounds.xRange.count() + 2
-        val board = Array(rows) {
-            val array = Array(columns) { '.' }
+        val rowCount = valleyBounds.yRange.count() + 2
+        val columnCount = valleyBounds.xRange.count() + 2
+
+        val board = Array(rowCount) {
+            val array = Array(columnCount) { '.' }
             array[0] = '#'
             array[array.lastIndex] = '#'
             array
         }
 
-        board[0] = Array(columns) { '#' }
-        board[board.lastIndex] = Array(columns) { '#' }
+        board[0] = Array(columnCount) { '#' }
+        board[board.lastIndex] = Array(columnCount) { '#' }
         board[start] = '.'
         board[end] = '.'
         board[position] = 'E'
@@ -146,11 +146,5 @@ class Day24(text: String, val debug: Debug = Debug.Disabled, private val maxRoun
 }
 
 //What is the fewest number of minutes required to avoid the blizzards and reach the goal?
-fun solveA(text: String, debug: Debug = Debug.Disabled, maxRounds: Int = 20_000): Int {
-    return Day24(text, debug, maxRounds).solveA()
-}
-
-
-fun solveB(text: String, debug: Debug = Debug.Disabled, maxRounds: Int = 20_000): Int {
-    return Day24(text, debug, maxRounds).solveB()
-}
+fun solveA(text: String, debug: Debug = Debug.Disabled, maxRounds: Int = 20_000): Int = Day24(text.lines(), maxRounds, debug).solveA()
+fun solveB(text: String, debug: Debug = Debug.Disabled, maxRounds: Int = 20_000): Int = Day24(text.lines(), maxRounds, debug).solveB()
