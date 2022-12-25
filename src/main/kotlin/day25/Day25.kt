@@ -3,36 +3,17 @@ package day25
 import helper.Debug
 
 //What SNAFU number do you supply to Bob's console?
-fun solveA(text: String, debug: Debug = Debug.Disabled): String {
-    return toSnafu(text.lines().sumOf { parseSnafu(it) })
-}
+fun solveA(text: String, debug: Debug = Debug.Disabled): String = toSnafu(text.lines().sumOf { parseSnafu(it) })
 
 fun toSnafu(input: Long): String {
-    val base5Str = input.toString(5)
-    val digits = mutableListOf<Int>()
+    var snafuNumber = ""
 
-    val iterator = base5Str.map { it.digitToInt() }.reversed().iterator()
-    var overflowDigit = 0
+    var number = input
 
-    while (iterator.hasNext()) {
-        val next = iterator.next()
-        val (digit, overflow) = snafuDigit(next + overflowDigit)
-        digits.add(digit)
-        overflowDigit = overflow
-    }
-
-    while (overflowDigit != 0) {
-        val (digit, overflow) = snafuDigit(overflowDigit)
-        digits.add(digit)
-        overflowDigit = overflow
-    }
-
-    val snafuNumber = digits.reversed().joinToString("") {
-        when (it) {
-            -1 -> "-"
-            -2 -> "="
-            else -> "$it"
-        }
+    while (number > 0L) {
+        val (digit, remainder) = snafuDigit(number)
+        snafuNumber = "$digit$snafuNumber"
+        number = remainder
     }
 
     val parseSnafu = parseSnafu(snafuNumber)
@@ -43,17 +24,20 @@ fun toSnafu(input: Long): String {
 /**
  * Returns digit and overflow for a snafu digit
  */
-private fun snafuDigit(digit: Int): Pair<Int, Int> = when {
-    digit >= 5 -> digit % 5 to digit / 5
-    digit == 4 -> -1 to 1
-    digit == 3 -> -2 to 1
-    else -> digit to 0
+private fun snafuDigit(number: Long): Pair<String, Long> {
+    val digit = number % 5
+    val remainder = number / 5
+    return when (digit) {
+        4L -> "-" to 1 + remainder
+        3L -> "=" to 1 + remainder
+        else -> digit.toString() to remainder
+    }
 }
 
 fun parseSnafu(it: String): Long {
     val iterator = it.reversed().iterator()
-    var num = 0L
-    var n = 1L
+    var number = 0L
+    var position = 1L
 
     while (iterator.hasNext()) {
         val digit = when (val char = iterator.nextChar()) {
@@ -61,9 +45,9 @@ fun parseSnafu(it: String): Long {
             '=' -> -2
             else -> char.digitToInt()
         }
-        num += digit * n
-        n *= 5
+        number += digit * position
+        position *= 5
     }
 
-    return num
+    return number
 }
